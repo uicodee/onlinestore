@@ -1,8 +1,8 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
 class User(BaseModel):
 
-    firstname: str
-    lastname: str
+    firstname: str = Field(alias="firstName")
+    lastname: str = Field(alias="lastName")
     email: EmailStr
