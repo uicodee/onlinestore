@@ -2,7 +2,8 @@ import uvicorn as uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from src.api import controllers
+from src.api import controllers, dependencies
+from src.infrastructure.database.factory import create_pool, make_connection_string
 from src.settings import load_settings
 # from src.infrastructure.database.factory import create_pool, make_connection_string
 
@@ -13,7 +14,7 @@ def main() -> FastAPI:
         docs_url="/docs",
         version="1.0.0"
     )
-    # pool = create_pool(url=make_connection_string(settings=settings))
+    pool = create_pool(url=make_connection_string(settings=settings))
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -21,7 +22,7 @@ def main() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    # dependencies.setup(app, pool, settings)
+    dependencies.setup(app, pool)
     controllers.setup(app)
     return app
 
